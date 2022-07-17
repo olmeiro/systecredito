@@ -33,6 +33,8 @@ class Server {
   middlewares () {
     this.app.use(cors(this.corsOptions))
     this.app.use(express.json())
+    // Directorio Público
+    this.app.use( express.static('public') );
   }
 
   routes () {
