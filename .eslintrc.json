@@ -4,7 +4,11 @@
   },
   "extends": [
     "eslint:recommended",
-    "prettier"
+    "prettier",
+    "standard",
+    "env": {
+      "jest": true
+    }
   ],
   "env": {
     "es6": true,

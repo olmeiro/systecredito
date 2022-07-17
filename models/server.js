@@ -44,6 +44,10 @@ class Server {
       console.log(`listening on port ${this.port}`)
     })
   }
+
+  close () {
+    this.app.close()
+  }
 }
 
 module.exports = Server

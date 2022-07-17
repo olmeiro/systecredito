@@ -1,4 +1,4 @@
-const { Router } = require('express')
+const { Router, request, response } = require('express')
 const router = Router()
 
 const { getMovies, updateMovie, createMovie, patchMovie, deleteMovie, getMovieByName, getMovieByCategory } = require('../controllers/movies')

@@ -1,26 +1,41 @@
 const { request, response } = require('express')
+const mongoose = require('mongoose')
 const Movie = require('../models/movie')
 
 const getMovies = async (req = request, res = response) => {
-  const { limite = 5, since = 0 } = req.query
   const query = { state: true }
-
   try {
-    const [total, movies] = await Promise.all([
-      Movie.countDocuments(query),
-      Movie.find(query).skip(since).limit(limite)
-    ])
+    const allMovies = await Movie.find(query)
     res.status(200).json({
-      total,
-      movies
+      allMovies
     })
   } catch (error) {
-    res.status(500).json({
+    res.send(500).json({
       ok: false,
       error
     })
   }
 }
+// const getMovies = async (req = request, res = response) => {
+//   const { limite = 5, since = 0 } = req.query
+//   const query = { state: true }
+
+//   try {
+//     const [total, movies] = await Promise.all([
+//       Movie.countDocuments(query),
+//       Movie.find(query).skip(since).limit(limite)
+//     ])
+//     res.status(200).json({
+//       total,
+//       movies
+//     })
+//   } catch (error) {
+//     res.status(500).json({
+//       ok: false,
+//       error
+//     })
+//   }
+// }
 
 const getMovieByCategory = async (req, res) => {
   const categoryMovie = req.query.category
@@ -28,7 +43,6 @@ const getMovieByCategory = async (req, res) => {
 
   try {
     const movieToFind = await Movie.find(query)
-
     res.status(200).json({
       movieToFind
     })
@@ -43,17 +57,15 @@ const getMovieByCategory = async (req, res) => {
 const getMovieByName = async (req, res) => {
   const nameMovie = req.query.movie
   const query = { name: nameMovie }
-
   try {
     const movieToFind = await Movie.find(query)
-
     res.status(200).json({
       movieToFind
     })
   } catch (error) {
     res.status(500).json({
       ok: false,
-      error
+      msg: 'No se encontro la pelicula'
     })
   }
 }
@@ -63,10 +75,9 @@ const createMovie = async (req, res = response) => {
   const movie = new Movie({ name, category, premier, price, units })
   try {
     await movie.save()
-
-  res.status(201).json({
-    movie
-  })
+    res.status(201).json({
+      movie
+    })
   } catch (error) {
     res.status(500).json({
       ok: false,
@@ -80,7 +91,6 @@ const updateMovie = async (req = request, res = response) => {
   const { _id, ...rest } = req.body
   try {
     const updateMovie = await Movie.findByIdAndUpdate(id, rest)
-
     res.status(200).json({
       updateMovie
     })
@@ -95,13 +105,11 @@ const updateMovie = async (req = request, res = response) => {
 const patchMovie = async (req, res) => {
   const { id } = req.params
   const { _id, ...rest } = req.body
-
   try {
     const patchMovie = await Movie.findByIdAndUpdate(id, rest)
-
-  res.status(200).json({
-    patchMovie
-  })
+    res.status(200).json({
+      patchMovie
+    })
   } catch (error) {
     res.status(500).json({
       ok: false,
@@ -113,20 +121,17 @@ const patchMovie = async (req, res) => {
 const deleteMovie = async (req, res) => {
   const { id } = req.params
   const { _id, name, category, premier, price, units, ...rest } = req.body
-
   try {
     const updateMovie = await Movie.findByIdAndUpdate(id, rest)
-
-  res.status(200).json({
-    updateMovie
-  })
+    res.status(200).json({
+      updateMovie
+    })
   } catch (error) {
     res.status(500).json({
       ok: false,
       error
     })
   }
-  
 }
 
 module.exports = {
