@@ -21,7 +21,7 @@ class Server {
 
     // cors options
     this.corsOptions = {
-      origin: 'http://localhost:8000',
+      origin: 'http://localhost:8080',
       optionsSuccessStatus: 200
     }
   }
