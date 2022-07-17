@@ -3,39 +3,25 @@ const mongoose = require('mongoose')
 const Movie = require('../models/movie')
 
 const getMovies = async (req = request, res = response) => {
+  const { limite = 5, since = 0 } = req.query
   const query = { state: true }
+
   try {
-    const allMovies = await Movie.find(query)
+    const [total, movies] = await Promise.all([
+      Movie.countDocuments(query),
+      Movie.find(query).skip(since).limit(limite)
+    ])
     res.status(200).json({
-      allMovies
+      total,
+      movies
     })
   } catch (error) {
-    res.send(500).json({
+    res.status(500).json({
       ok: false,
       error
     })
   }
 }
-// const getMovies = async (req = request, res = response) => {
-//   const { limite = 5, since = 0 } = req.query
-//   const query = { state: true }
-
-//   try {
-//     const [total, movies] = await Promise.all([
-//       Movie.countDocuments(query),
-//       Movie.find(query).skip(since).limit(limite)
-//     ])
-//     res.status(200).json({
-//       total,
-//       movies
-//     })
-//   } catch (error) {
-//     res.status(500).json({
-//       ok: false,
-//       error
-//     })
-//   }
-// }
 
 const getMovieByCategory = async (req, res) => {
   const categoryMovie = req.query.category
