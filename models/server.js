@@ -7,7 +7,7 @@ const { connectiondb } = require('../db/config')
 class Server {
   constructor () {
     this.app = express()
-    this.port = config.DB_PORT
+    this.port = config.PORT
     this.moviesPath = '/api/movies'
 
     // Connect DB
